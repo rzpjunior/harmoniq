@@ -41,7 +41,7 @@ const LoginPage: React.FC = () => {
             required
           />
         </div>
-        <Link to="/hello" className="login-button">Login</Link>
+        <Link to="/Home" className="login-button">Login</Link>
       </form>
     </div>
   );
