@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: 'Gotham';
+  src: url('../../assets/Flamante-Round-0Medium-FFP.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
 body {
   background: linear-gradient(
     200.96deg,
@@ -9,5 +17,5 @@ body {
     #330033 51.77%,
     #000000 129.35%
   );
-  font-family: sans-serif;
+  font-family: 'Gotham', sans-serif;
 }
