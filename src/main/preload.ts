@@ -1,6 +1,6 @@
-// Disable no-unused-vars, broken for spread args
-/* eslint no-unused-vars: off */
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
+
+console.log('API_BASE_URL in main process:', process.env.REACT_APP_API_BASE_URL);
 
 export type Channels = 'ipc-example';
 
@@ -22,6 +22,9 @@ const electronHandler = {
       ipcRenderer.once(channel, (_event, ...args) => func(...args));
     },
   },
+  env: {
+    API_BASE_URL: process.env.REACT_APP_API_BASE_URL // Expose your environment variable here
+  }
 };
 
 contextBridge.exposeInMainWorld('electron', electronHandler);

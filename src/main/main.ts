@@ -4,6 +4,9 @@ import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
+import { config } from 'dotenv';
+
+config();
 
 class AppUpdater {
   constructor() {
