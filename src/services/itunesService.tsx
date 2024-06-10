@@ -6,7 +6,7 @@ export const searchTracks = async (query: string) => {
       params: {
         term: query,
         media: 'music',
-        limit: 10,
+        limit: 5,
       },
     });
     return response.data.results;

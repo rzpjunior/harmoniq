@@ -5,7 +5,6 @@ import LoginPage from './pages/LoginPage';
 import HomePage from './pages/HomePage/HomePage';
 import ErrorBoundary from './components/Error/ErrorBoundary';
 
-
 export default function App() {
   return (
     <Router>

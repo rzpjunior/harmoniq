@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { setAuthToken } from '../../../utils/axiosInstance';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -6,7 +6,19 @@ import { useNavigate } from 'react-router-dom';
 const LoginPage: React.FC = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const navigate = useNavigate(); // Create navigate function
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      setAuthToken(token);
+      navigate('/home');
+    }
+    setLoading(false);
+  }, [navigate]);
+
+  if (loading) return <div>Loading...</div>;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -16,8 +28,8 @@ const LoginPage: React.FC = () => {
         password
       });
       console.log('Login successful:', response.data);
-      setAuthToken(response.data.token);  // Set the token in axiosInstance
-      navigate('/home'); // Navigate to /home on successful login
+      setAuthToken(response.data.token);
+      navigate('/home');
     } catch (error) {
       console.error('Login failed:', error);
     }
@@ -25,16 +37,10 @@ const LoginPage: React.FC = () => {
     setPassword('');
   };
 
-
   return (
     <div className="flex items-center justify-center min-h-screen" style={{ background: 'linear-gradient(135deg, #001F33 29.09%, #330033 51.77%, #000000 129.35%)' }}>
       <div className="p-10 bg-black/75 shadow-xl rounded-xl max-w-lg w-full">
         <h2 className="text-3xl font-bold text-center mb-8 text-white">Log in to Harmoniq</h2>
-        <div className="flex flex-col space-y-4 mb-8">
-        <button className="bg-black text-white border border-gray-500 rounded-full py-2 px-4 hover:border-white">Continue with Google</button>
-          <button className="bg-black text-white border border-gray-500 rounded-full py-2 px-4 hover:border-white">Continue with Facebook</button>
-          <button className="bg-black text-white border border-gray-500 rounded-full py-2 px-4 hover:border-white">Continue with phone number</button>
-        </div>
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <label htmlFor="username" className="block text-sm font-medium text-white">Email or username</label>

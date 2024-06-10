@@ -13,15 +13,26 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ track }) => {
   const [volume, setVolume] = useState(1);
 
   useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.src = track.previewUrl;
-      audioRef.current.load();
-      audioRef.current.volume = volume;
-      if (isPlaying) {
-        audioRef.current.play();
+    const audio = audioRef.current;
+    if (audio) {
+      audio.src = track.previewUrl;
+      audio.load();
+      audio.volume = volume;
+      audio.play().then(() => {
+        setIsPlaying(true);
+      }).catch(error => console.error("Error playing the track: ", error));
+
+      const handleAudioEnd = () => {
+        setIsPlaying(false);
+      };
+
+      audio.addEventListener('ended', handleAudioEnd);
+
+      return () => {
+        audio.removeEventListener('ended', handleAudioEnd);
+      };
       }
-    }
-  }, [track, volume]);
+    }, [track, volume]);
 
   const togglePlayPause = () => {
     if (audioRef.current) {

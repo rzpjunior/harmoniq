@@ -6,11 +6,7 @@ interface PlayerProps {
 }
 
 const Player: React.FC<PlayerProps> = ({ currentTrack }) => {
-  if (!currentTrack) {
-    return null;
-  }
-
-  return <AudioPlayer track={currentTrack} />;
+  return <AudioPlayer track={currentTrack || {}} />;
 };
 
 export default Player;

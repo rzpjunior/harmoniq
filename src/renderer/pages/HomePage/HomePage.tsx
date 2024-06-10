@@ -7,16 +7,17 @@ import Player from '../../components/HomeComponents/Player';
 
 const HomePage = () => {
   const [currentTrack, setCurrentTrack] = useState<any>(null);
+  const [currentPlayingTrackId, setCurrentPlayingTrackId] = useState<string | null>(null);
+  
 
   const handleTrackSelect = (track: any) => {
     setCurrentTrack(track);
+    setCurrentPlayingTrackId(track.trackId); // Set the current playing track ID
   };
 
   return (
     <div className="flex justify-center items-start h-screen">
-      <Playlist/>
-      <Content onTrackSelect={handleTrackSelect}/>
-      <Information/>
+      <Content onTrackSelect={handleTrackSelect} currentPlayingTrackId={currentPlayingTrackId}/>
       <Player currentTrack={currentTrack}/>
     </div>
   );
