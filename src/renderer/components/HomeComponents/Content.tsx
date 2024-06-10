@@ -21,6 +21,23 @@ const Content: React.FC<ContentProps> = ({ onTrackSelect, currentPlayingTrackId,
     fetchTracks();
   }, [query]);
 
+  // Helper function to convert milliseconds to minutes and seconds
+  const formatDuration = (millis: number) => {
+    const minutes = Math.floor(millis / 60000);
+    const seconds = ((millis % 60000) / 1000).toFixed(0);
+    return minutes + ":" + (parseInt(seconds) < 10 ? '0' : '') + seconds;
+  };
+
+  const truncateTitle = (title: string) => {
+    console.log(title);
+    const wordLimit = 6;
+    const words = title.split(' ');
+    if (words.length > wordLimit) {
+      return words.slice(0, wordLimit).join(' ') + '...';
+    }
+    return title;
+  };
+
   return (
     <div className="flex-1 p-4">
       <input
@@ -34,28 +51,38 @@ const Content: React.FC<ContentProps> = ({ onTrackSelect, currentPlayingTrackId,
         {tracks.map((track) => (
           <div key={track.trackId} className="flex items-center mb-4 bg-black bg-opacity-50 p-2">
             <img src={track.artworkUrl60} alt={track.trackName} className="w-12 h-12 mr-4" />
-            <div className="flex-grow">
-              <h3 className="text-lg">{track.trackName}</h3>
+            <div className="flex-grow flex flex-col justify-center">
+            <h3 className="text-lg overflow-hidden whitespace-nowrap">{track.trackName}</h3>
               <p className="text-sm text-gray-600">{track.artistName}</p>
             </div>
-            <button className="p-1 mr-2 text-red-500">
-              <i className="fas fa-heart"></i>
-            </button>
-            <button
-              onClick={() => {
-                if (currentPlayingTrackId === track.trackId) {
-                  togglePlayPause();
-                } else {
-                  onTrackSelect(track);
+            <div className="w-20 text-center">
+              <p className="text-sm">{formatDuration(track.trackTimeMillis)}</p>
+            </div>
+            <div className="flex items-center ml-4">
+              <button
+                onClick={() => {
+                  if (currentPlayingTrackId === track.trackId) {
+                    togglePlayPause();
+                  } else {
+                    onTrackSelect(track);
+                  }
+                }}
+                className="p-2 bg-blue-500 text-white"
+              >
+                {currentPlayingTrackId === track.trackId && isPlaying ? 
+                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+                  </svg>
+                  : 
+                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
                 }
-              }}
-              className="p-2 bg-blue-500 text-white mr-2"
-            >
-              {currentPlayingTrackId === track.trackId && isPlaying ? 'Pause' : 'Play'}
-            </button>
-            <button className="p-1 text-gray-700">
-              <i className="fas fa-ellipsis-h"></i>
-            </button>
+              </button>
+              <button className="p-1 text-gray-700 ml-2">
+                <i className="fas fa-ellipsis-h"></i>
+              </button>
+            </div>
           </div>
         ))}
       </div>
