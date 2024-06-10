@@ -16,17 +16,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ track, isPlaying, togglePlayP
 
   useEffect(() => {
     const audio = audioRef.current;
-    if (audio && track) {
-      audio.src = track.previewUrl;
-      audio.load();
-      audio.volume = volume;
-
-      if (isPlaying) {
-        audio.play().catch(error => console.error("Error playing the track: ", error));
-      } else {
-        audio.pause();
-      }
-
+    if (audio) {
       const handleAudioEnd = () => {
         console.log("Track ended");
         handleTrackEnd();
@@ -38,7 +28,30 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ track, isPlaying, togglePlayP
         audio.removeEventListener('ended', handleAudioEnd);
       };
     }
-  }, [track, volume, isPlaying, handleTrackEnd]);
+  }, [handleTrackEnd]);
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (audio && track) {
+      if (audio.src !== track.previewUrl) {
+        audio.src = track.previewUrl;
+        audio.load();
+      }
+
+      if (isPlaying) {
+        audio.play().catch(error => console.error("Error playing the track: ", error));
+      } else {
+        audio.pause();
+      }
+    }
+  }, [track, isPlaying]);
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (audio) {
+      audio.volume = volume;
+    }
+  }, [volume]);
 
   const handleTimeUpdate = () => {
     if (audioRef.current) {
@@ -73,24 +86,33 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ track, isPlaying, togglePlayP
   };
 
   return (
-    <div className="fixed bottom-0 left-0 w-full bg-black text-white p-4">
+    <div className="fixed bottom-0 left-0 w-full bg-gray-900 text-white p-4">
       <div className="flex items-center justify-between">
-        <div>
-          <h3>{track ? track.trackName : 'No Track Selected'}</h3>
-          <p>{track ? track.artistName : ''}</p>
-        </div>
-        <button onClick={togglePlayPause} className="ml-4">
-          {isPlaying ? 'Pause' : 'Play'}
-        </button>
         <div className="flex items-center">
-          <input
-            type="range"
-            min="0"
-            max={duration}
-            value={currentTime}
-            onChange={handleProgressChange}
-            className="w-full"
-          />
+          {track && (
+            <img src={track.artworkUrl60} alt="Album Art" className="w-12 h-12 mr-4" />
+          )}
+          <div className="overflow-hidden whitespace-nowrap w-48">
+            <h3 className={`text-lg ${track && track.trackName.length > 20 ? 'marquee' : ''}`}>
+              {track ? track.trackName : 'No Track Selected'}
+            </h3>
+            <p className="text-sm text-gray-400">{track ? track.artistName : ''}</p>
+          </div>
+        </div>
+        <div className="flex items-center">
+          <button onClick={togglePlayPause} className="mx-2">
+            {isPlaying ? (
+              <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+              </svg>
+            ) : (
+              <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M8 5v14l11-7z" />
+              </svg>
+            )}
+          </button>
+        </div>
+        <div className="flex items-center">
           <input
             type="range"
             min="0"
@@ -98,9 +120,19 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ track, isPlaying, togglePlayP
             step="0.01"
             value={volume}
             onChange={handleVolumeChange}
-            className="ml-2"
+            className="w-24 mx-2"
           />
         </div>
+      </div>
+      <div className="mt-4">
+        <input
+          type="range"
+          min="0"
+          max={duration}
+          value={currentTime}
+          onChange={handleProgressChange}
+          className="w-full"
+        />
       </div>
       <audio
         ref={audioRef}
