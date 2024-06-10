@@ -121,6 +121,9 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ track, isPlaying, togglePlayP
             value={volume}
             onChange={handleVolumeChange}
             className="w-24 mx-2"
+            style={{
+              background: 'transparent',
+            }}
           />
         </div>
       </div>
@@ -132,6 +135,9 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ track, isPlaying, togglePlayP
           value={currentTime}
           onChange={handleProgressChange}
           className="w-full"
+          style={{
+            background: 'transparent',
+          }}
         />
       </div>
       <audio

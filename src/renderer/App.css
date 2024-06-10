@@ -17,7 +17,6 @@ body {
     #330033 51.77%,
     #000000 129.35%
   );
-  font-family: 'Gotham', sans-serif;
   color: rgba(255, 255, 255, 0.815);
 }
 
@@ -32,4 +31,26 @@ body {
   white-space: nowrap;
   display: inline-block;
   animation: marquee 10s linear infinite;
+}
+
+@keyframes marquee-content {
+  0% { transform: translateX(0); }
+  50% { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}
+
+.marquee-content {
+  overflow: hidden;
+  white-space: nowrap;
+  display: inline-block;
+}
+
+.marquee-content:hover {
+  animation: marquee 8s linear infinite;
+}
+
+.truncate {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
