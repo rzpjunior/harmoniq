@@ -202,6 +202,13 @@ export default class MenuBuilder {
             accelerator: 'Ctrl+O',
           },
           {
+            label: '&Logout',
+            accelerator: 'Ctrl+L',
+            click: () => {
+              this.handleLogout();
+            },
+          },
+          {
             label: '&Close',
             accelerator: 'Ctrl+W',
             click: () => {
@@ -286,5 +293,13 @@ export default class MenuBuilder {
     ];
 
     return templateDefault;
+  }
+
+  handleLogout() {
+    this.mainWindow.webContents.executeJavaScript('localStorage.removeItem("token");')
+      .then(() => {
+        this.mainWindow.reload();
+      })
+      .catch(error => console.error('Failed to clear token:', error));
   }
 }
