@@ -19,10 +19,14 @@ const HomePage = () => {
     setIsPlaying(!isPlaying);
   };
 
+  const handleTrackEnd = () => {
+    setIsPlaying(false);
+  };
+
   return (
     <div className="flex justify-center items-start h-screen">
       <Content onTrackSelect={handleTrackSelect} currentPlayingTrackId={currentTrack?.trackId} togglePlayPause={togglePlayPause} isPlaying={isPlaying}/>
-      <Player currentTrack={currentTrack} isPlaying={isPlaying} togglePlayPause={togglePlayPause}/>
+      <Player currentTrack={currentTrack} isPlaying={isPlaying} togglePlayPause={togglePlayPause} handleTrackEnd={handleTrackEnd}/>
     </div>
   );
 };

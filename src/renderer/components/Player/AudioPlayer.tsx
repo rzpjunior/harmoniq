@@ -5,9 +5,10 @@ interface AudioPlayerProps {
   track: any;
   isPlaying: boolean;
   togglePlayPause: () => void;
+  handleTrackEnd: () => void;
 }
 
-const AudioPlayer: React.FC<AudioPlayerProps> = ({ track, isPlaying, togglePlayPause }) => {
+const AudioPlayer: React.FC<AudioPlayerProps> = ({ track, isPlaying, togglePlayPause, handleTrackEnd }) => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -28,6 +29,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ track, isPlaying, togglePlayP
 
       const handleAudioEnd = () => {
         console.log("Track ended");
+        handleTrackEnd();
       };
 
       audio.addEventListener('ended', handleAudioEnd);
@@ -36,7 +38,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ track, isPlaying, togglePlayP
         audio.removeEventListener('ended', handleAudioEnd);
       };
     }
-  }, [track, volume, isPlaying]);
+  }, [track, volume, isPlaying, handleTrackEnd]);
 
   const handleTimeUpdate = () => {
     if (audioRef.current) {
