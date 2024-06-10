@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { setAuthToken } from '../../../utils/axiosInstance';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const LoginPage: React.FC = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate(); // Create navigate function
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -15,12 +17,14 @@ const LoginPage: React.FC = () => {
       });
       console.log('Login successful:', response.data);
       setAuthToken(response.data.token);  // Set the token in axiosInstance
+      navigate('/home'); // Navigate to /home on successful login
     } catch (error) {
       console.error('Login failed:', error);
     }
     setUsername('');
     setPassword('');
   };
+
 
   return (
     <div className="flex items-center justify-center min-h-screen" style={{ background: 'linear-gradient(135deg, #001F33 29.09%, #330033 51.77%, #000000 129.35%)' }}>
