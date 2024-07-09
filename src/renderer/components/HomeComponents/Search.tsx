@@ -8,7 +8,7 @@ interface ContentProps {
   isPlaying: boolean;
 }
 
-const Content: React.FC<ContentProps> = ({ onTrackSelect, currentPlayingTrackId, togglePlayPause, isPlaying }) => {
+const Search: React.FC<ContentProps> = ({ onTrackSelect, currentPlayingTrackId, togglePlayPause, isPlaying }) => {
   const [query, setQuery] = useState('');
   const [tracks, setTracks] = useState<any[]>([]);
 
@@ -90,4 +90,4 @@ const Content: React.FC<ContentProps> = ({ onTrackSelect, currentPlayingTrackId,
   );
 };
 
-export default Content;
+export default Search;
