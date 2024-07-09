@@ -5,6 +5,8 @@ import { AiFillHeart, AiOutlinePlus, AiOutlineMenu, AiOutlineEllipsis } from 're
 
 import { debounce } from 'lodash';
 
+import { useSidebar } from '../Sidebar/SidebarContext';
+
 interface AudioPlayerProps {
   track: any;
   isPlaying: boolean;
@@ -13,6 +15,7 @@ interface AudioPlayerProps {
 }
 
 const AudioPlayer: React.FC<AudioPlayerProps> = ({ track, isPlaying, togglePlayPause, handleTrackEnd }) => {
+  const { isSidebarMinimized } = useSidebar();
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -96,9 +99,9 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ track, isPlaying, togglePlayP
 };
 
   return (
-    <div className="fixed bottom-0 flex items-center justify-between p-4 bg-gray-900 text-gray-400 w-[calc(100%-16rem)]">
+    <div className={`rounded-xl fixed bottom-2 flex items-center justify-between p-4 bg-gray-800 text-gray-400 ${isSidebarMinimized ? 'w-[calc(100%-4.5rem)]' : 'w-[calc(100%-16.4rem)]'}`}>
         <div className="flex items-center space-x-4">
-            <button onClick={togglePlayPause} className="text-green-500 text-xl">
+            <button onClick={togglePlayPause} className=" flex items-center justify-center w-12 h-12 bg-midPurple text-white rounded-full">
               {isPlaying ? (
                   <FaPause />
                 ) : (
@@ -121,7 +124,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ track, isPlaying, togglePlayP
                     onChange={handleProgressChange}
                     className="w-full h-1 appearance-none"
                     style={{
-                        background: `linear-gradient(to right, #10b981 ${currentTime / duration * 100}%, #4b5563 0%)`,
+                        background: `linear-gradient(to right, #f0f0f0 ${currentTime / duration * 100}%, #4b5563 0%)`,
                     }}
                 />
             <span>{formatTime(duration)}</span>
@@ -151,7 +154,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ track, isPlaying, togglePlayP
                       onChange={handleVolumeChange}
                       className="w-24 h-1 bg-gray-600 rounded-full appearance-none"
                       style={{
-                          background: `linear-gradient(to right, #3b82f6 ${volume * 100}%, #e5e7eb 0%)`
+                          background: `linear-gradient(to right, #f0f0f0 ${volume * 100}%, #4b5563 0%)`
                       }}
                   />
               </div>
