@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { searchTracks } from '../../../services/itunesService';
 
-interface ContentProps {
+interface SearchProps {
   onTrackSelect: (track: any) => void;
   currentPlayingTrackId: string | null;
   togglePlayPause: () => void;
   isPlaying: boolean;
 }
 
-const Search: React.FC<ContentProps> = ({ onTrackSelect, currentPlayingTrackId, togglePlayPause, isPlaying }) => {
+const Search: React.FC<SearchProps> = ({ onTrackSelect, currentPlayingTrackId, togglePlayPause, isPlaying }) => {
   const [query, setQuery] = useState('');
   const [tracks, setTracks] = useState<any[]>([]);
 
@@ -39,7 +39,7 @@ const Search: React.FC<ContentProps> = ({ onTrackSelect, currentPlayingTrackId, 
   };
 
   return (
-    <div className="flex-1 p-4">
+    <div className="flex-1 p-4 pr-12 pt-9">
       <input
         type="text"
         value={query}
