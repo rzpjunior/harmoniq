@@ -99,7 +99,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ track, isPlaying, togglePlayP
 };
 
   return (
-    <div className={`rounded-xl fixed bottom-2 flex items-center justify-between p-4 bg-gray-800 text-gray-400 ${isSidebarMinimized ? 'w-[calc(100%-4.5rem)]' : 'w-[calc(100%-16.4rem)]'}`}>
+    <div className={`rounded-xl fixed bottom-2 flex items-center justify-between p-4 bg-gray-800 text-gray-400 ${isSidebarMinimized ? 'w-[calc(100%-4.9rem)]' : 'w-[calc(100%-16.4rem)]'}`}>
         <div className="flex items-center space-x-4">
             <button onClick={togglePlayPause} className=" flex items-center justify-center w-12 h-12 bg-midPurple text-white rounded-full">
               {isPlaying ? (
