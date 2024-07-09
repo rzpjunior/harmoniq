@@ -4,7 +4,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 const LoginPage: React.FC = () => {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -23,17 +23,17 @@ const LoginPage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`${window.electron.env.API_BASE_URL}/auth/login`, {
-        username,
+      const response = await axios.post(`${window.electron.env.API_BASE_URL}/user/login`, {
+        email,
         password
       });
-      console.log('Login successful:', response.data);
-      setAuthToken(response.data.token);
+      console.log('Login successful:', response.data.data);
+      setAuthToken(response.data.data.token);
       navigate('/home');
     } catch (error) {
       console.error('Login failed:', error);
     }
-    setUsername('');
+    setEmail('');
     setPassword('');
   };
 
@@ -43,12 +43,12 @@ const LoginPage: React.FC = () => {
         <h2 className="text-3xl font-bold text-center mb-8 text-white">Log in to Harmoniq</h2>
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label htmlFor="username" className="block text-sm font-medium text-white">Email or username</label>
+            <label htmlFor="email" className="block text-sm font-medium text-white">Email</label>
             <input
               type="text"
-              id="username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               required
               className="mt-1 block w-full px-4 py-3 border border-gray-500 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:border-white focus:border-2"
               style={{ background: 'black', color: 'white' }}

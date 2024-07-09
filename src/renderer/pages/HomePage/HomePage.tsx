@@ -1,32 +1,22 @@
-import React, { useState } from 'react';
-import Content from '../../components/HomeComponents/Content';
-import Player from '../../components/HomeComponents/Player';
+import React from 'react';
+import Search from '../../components/HomeComponents/Search';
 
-const HomePage = () => {
-  const [currentTrack, setCurrentTrack] = useState<any>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
+interface HomePageProps {
+  handleTrackSelect: (track: any) => void;
+  currentTrack: any;
+  isPlaying: boolean;
+  togglePlayPause: () => void;
+}
 
-  const handleTrackSelect = (track: any) => {
-    if (currentTrack && track.trackId === currentTrack.trackId) {
-      setIsPlaying(!isPlaying);
-    } else {
-      setCurrentTrack(track);
-      setIsPlaying(true);
-    }
-  };
-
-  const togglePlayPause = () => {
-    setIsPlaying(!isPlaying);
-  };
-
-  const handleTrackEnd = () => {
-    setIsPlaying(false);
-  };
-
+const HomePage: React.FC<HomePageProps> = ({ handleTrackSelect, currentTrack, isPlaying, togglePlayPause }) => {
   return (
-    <div className="flex justify-center items-start h-screen">
-      <Content onTrackSelect={handleTrackSelect} currentPlayingTrackId={currentTrack?.trackId} togglePlayPause={togglePlayPause} isPlaying={isPlaying}/>
-      <Player currentTrack={currentTrack} isPlaying={isPlaying} togglePlayPause={togglePlayPause} handleTrackEnd={handleTrackEnd}/>
+    <div className="flex-1 flex flex-col">
+      <Search
+        onTrackSelect={handleTrackSelect}
+        currentPlayingTrackId={currentTrack?.trackId}
+        togglePlayPause={togglePlayPause}
+        isPlaying={isPlaying}
+      />
     </div>
   );
 };

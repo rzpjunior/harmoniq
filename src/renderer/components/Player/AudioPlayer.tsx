@@ -1,4 +1,8 @@
 import React, { useRef, useEffect, useState } from 'react';
+import { FaPause, FaBackward, FaForward, FaRandom, FaVolumeUp, FaPlay } from 'react-icons/fa';
+import { MdRepeat } from 'react-icons/md';
+import { AiFillHeart, AiOutlinePlus, AiOutlineMenu, AiOutlineEllipsis } from 'react-icons/ai';
+
 import { debounce } from 'lodash';
 
 interface AudioPlayerProps {
@@ -85,66 +89,80 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ track, isPlaying, togglePlayP
     setCurrentTime(newTime);
   };
 
+  const formatTime = (time: number) => {
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60);
+    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+};
+
   return (
-    <div className="fixed bottom-0 left-0 w-full bg-gray-900 text-white p-4">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center">
-          {track && (
-            <img src={track.artworkUrl60} alt="Album Art" className="w-12 h-12 mr-4" />
-          )}
-          <div className="overflow-hidden whitespace-nowrap w-48">
-            <h3 className={`text-lg ${track && track.trackName.length > 20 ? 'marquee' : ''}`}>
-              {track ? track.trackName : 'No Track Selected'}
-            </h3>
-            <p className="text-sm text-gray-400">{track ? track.artistName : ''}</p>
+    <div className="fixed bottom-0 flex items-center justify-between p-4 bg-gray-900 text-gray-400 w-[calc(100%-16rem)]">
+        <div className="flex items-center space-x-4">
+            <button onClick={togglePlayPause} className="text-green-500 text-xl">
+              {isPlaying ? (
+                  <FaPause />
+                ) : (
+                  <FaPlay />
+                )
+              }
+            </button>
+            <button className="text-xl"><FaBackward /></button>
+            <button className="text-xl"><FaForward /></button>
+            <button className="text-xl"><FaRandom /></button>
+            <button className="text-xl"><MdRepeat /></button>
+        </div>
+        <div className="flex items-center space-x-4 flex-1 mx-4 w-38">
+            <span>{formatTime(currentTime)}</span>
+                <input
+                    type="range"
+                    min="0"
+                    max={duration}
+                    value={currentTime}
+                    onChange={handleProgressChange}
+                    className="w-full h-1 appearance-none"
+                    style={{
+                        background: `linear-gradient(to right, #10b981 ${currentTime / duration * 100}%, #4b5563 0%)`,
+                    }}
+                />
+            <span>{formatTime(duration)}</span>
           </div>
-        </div>
-        <div className="flex items-center">
-          <button onClick={togglePlayPause} className="mx-2">
-            {isPlaying ? (
-              <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
-              </svg>
-            ) : (
-              <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M8 5v14l11-7z" />
-              </svg>
-            )}
-          </button>
-        </div>
-        <div className="flex items-center">
-          <input
-            type="range"
-            min="0"
-            max="1"
-            step="0.01"
-            value={volume}
-            onChange={handleVolumeChange}
-            className="w-24 mx-2"
-            style={{
-              background: 'transparent',
-            }}
+          <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-2">
+                  {track && (
+                    <img src={track.artworkUrl60} alt="Album Art" className="w-12 h-12 rounded-md" />
+                  )}
+                  <div>
+                    <div className="overflow-hidden whitespace-nowrap w-38">
+                      <p className={`text-white text-sm ${track && track.trackName.length > 25 ? 'marquee' : ''}`}>{track ? track.trackName : 'No Track Selected'}</p>
+                    </div>
+                      <p className="text-gray-400 text-xs">{track ? track.artistName : ''}</p>
+                  </div>
+              </div>
+              <button className="text-xl"><AiFillHeart /></button>
+              <button className="text-xl"><AiOutlinePlus /></button>
+              <div className="flex items-center space-x-2">
+                  <FaVolumeUp className="text-2xl" />
+                  <input
+                      type="range"
+                      min="0"
+                      max="1"
+                      step="0.01"
+                      value={volume}
+                      onChange={handleVolumeChange}
+                      className="w-24 h-1 bg-gray-600 rounded-full appearance-none"
+                      style={{
+                          background: `linear-gradient(to right, #3b82f6 ${volume * 100}%, #e5e7eb 0%)`
+                      }}
+                  />
+              </div>
+              <button className="text-xl"><AiOutlineEllipsis /></button>
+              <button className="text-xl"><AiOutlineMenu /></button>
+          </div>
+          <audio
+            ref={audioRef}
+            onTimeUpdate={handleTimeUpdate}
+            onLoadedMetadata={handleLoadedMetadata}
           />
-        </div>
-      </div>
-      <div className="mt-4">
-        <input
-          type="range"
-          min="0"
-          max={duration}
-          value={currentTime}
-          onChange={handleProgressChange}
-          className="w-full"
-          style={{
-            background: 'transparent',
-          }}
-        />
-      </div>
-      <audio
-        ref={audioRef}
-        onTimeUpdate={handleTimeUpdate}
-        onLoadedMetadata={handleLoadedMetadata}
-      />
     </div>
   );
 };
