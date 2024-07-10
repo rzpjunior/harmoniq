@@ -4,7 +4,8 @@ module.exports = {
     extend: {
       colors: {
         customGray: '#898989',
-        midPurple: '#8E44AD',
+        primaryHq: '#8E44AD',
+        grayHq: '#333842'
       },
     },
   },
