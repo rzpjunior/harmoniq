@@ -59,12 +59,12 @@ const App = () => {
                     {/* <Route path='/genres/:genre' element={<GenrePage />}/> */}
                   </Routes>
                 </div>
-                <AudioPlayer 
-                  track={currentTrack} 
-                  isPlaying={isPlaying} 
-                  togglePlayPause={togglePlayPause} 
-                  handleTrackEnd={handleTrackEnd} 
-                />
+                  <AudioPlayer 
+                    track={currentTrack} 
+                    isPlaying={isPlaying} 
+                    togglePlayPause={togglePlayPause} 
+                    handleTrackEnd={handleTrackEnd} 
+                  />
               </div>
             </div>
           </ErrorBoundary>

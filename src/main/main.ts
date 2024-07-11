@@ -49,6 +49,7 @@ const installExtensions = async () => {
     .catch(console.log);
 };
 
+
 const createWindow = async () => {
   if (isDebug) {
     await installExtensions();
@@ -67,6 +68,8 @@ const createWindow = async () => {
     width: 1024,
     height: 728,
     icon: getAssetPath('icon.png'),
+    minWidth: 700,
+    minHeight: 600,
     webPreferences: {
       preload: app.isPackaged
         ? path.join(__dirname, 'preload.js')

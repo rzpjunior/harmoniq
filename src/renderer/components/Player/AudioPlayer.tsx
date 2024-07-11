@@ -6,6 +6,7 @@ import { AiFillHeart, AiOutlinePlus, AiOutlineMenu, AiOutlineEllipsis } from 're
 import { debounce } from 'lodash';
 
 import { useSidebar } from '../Sidebar/SidebarContext';
+import useHover from './useHover';
 
 interface AudioPlayerProps {
   track: any;
@@ -20,6 +21,8 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ track, isPlaying, togglePlayP
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [volume, setVolume] = useState(1);
+  const trackHover = useHover();
+  const volumeHover = useHover();
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -116,17 +119,20 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ track, isPlaying, togglePlayP
         </div>
         <div className="flex items-center space-x-4 flex-1 mx-4 w-38">
             <span>{formatTime(currentTime)}</span>
-                <input
-                    type="range"
-                    min="0"
-                    max={duration}
-                    value={currentTime}
-                    onChange={handleProgressChange}
-                    className="w-full h-1 appearance-none"
-                    style={{
-                        background: `linear-gradient(to right, #f0f0f0 ${currentTime / duration * 100}%, #4b5563 0%)`,
-                    }}
-                />
+            <input
+                type="range"
+                min="0"
+                max={duration}
+                value={currentTime}
+                onChange={handleProgressChange}
+                style={{
+                  background: `linear-gradient(to right, ${
+                    trackHover.isHovered ? '#8E44AD' : '#f0f0f0'
+                  } ${currentTime / duration * 100}%, #4b5563 0%)`,
+                }}
+                onMouseEnter={trackHover.onMouseEnter}
+                onMouseLeave={trackHover.onMouseLeave}
+              />
             <span>{formatTime(duration)}</span>
           </div>
           <div className="flex items-center space-x-4">
@@ -143,19 +149,22 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ track, isPlaying, togglePlayP
               </div>
               <button className="text-xl"><AiFillHeart /></button>
               <button className="text-xl"><AiOutlinePlus /></button>
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-2 w-28">
                   <FaVolumeUp className="text-2xl" />
                   <input
-                      type="range"
-                      min="0"
-                      max="1"
-                      step="0.01"
-                      value={volume}
-                      onChange={handleVolumeChange}
-                      className="w-24 h-1 bg-gray-600 rounded-full appearance-none"
-                      style={{
-                          background: `linear-gradient(to right, #f0f0f0 ${volume * 100}%, #4b5563 0%)`
-                      }}
+                    type="range"
+                    min="0"
+                    max="1"
+                    step="0.01"
+                    value={volume}
+                    onChange={handleVolumeChange}
+                    style={{
+                      background: `linear-gradient(to right, ${
+                        volumeHover.isHovered ? '#8E44AD' : '#f0f0f0'
+                      } ${volume * 100}%, #4b5563 0%)`,
+                    }}
+                    onMouseEnter={volumeHover.onMouseEnter}
+                    onMouseLeave={volumeHover.onMouseLeave}
                   />
               </div>
               <button className="text-xl"><AiOutlineEllipsis /></button>
