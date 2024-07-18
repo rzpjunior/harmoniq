@@ -43,8 +43,8 @@ const App = () => {
                 <Topbar />
                 <div className="flex-1 overflow-auto mt-16">
                   <Routes>
-                    <Route path="/" element={<LoginPage />} />
-                    <Route path="/Home" element={<HomePage />} />
+                    {/* <Route path="/" element={<LoginPage />} /> */}
+                    <Route path="/" element={<HomePage />} />
                     <Route 
                       path="/Search" 
                       element={
