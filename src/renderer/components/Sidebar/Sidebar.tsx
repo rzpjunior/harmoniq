@@ -2,9 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { FaMusic, FaHeart, FaFolder, FaPodcast, FaBookOpen, FaUsers, FaBars } from 'react-icons/fa';
 import { useSidebar } from '../Sidebar/SidebarContext';
 import { Link, useLocation } from 'react-router-dom';
+import { useSearch } from '../Search/SearchContext';
 
 const Sidebar = () => {
   const { isSidebarMinimized, toggleSidebar } = useSidebar();
+  const { setIsSearchActive, setSearchQuery } = useSearch();
   const location = useLocation();
   const [active, setActive] = useState(location.pathname);
 
@@ -13,6 +15,8 @@ const Sidebar = () => {
   }, [location.pathname]);
 
   const handleItemClick = (path: string) => {
+    setIsSearchActive(false);
+    setSearchQuery('');
     setActive(path);
   };
 
