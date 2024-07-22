@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
-import LoginPage from './pages/LoginPage';
+import LoginPage from './components/Spotify/Login';
 import HomePage from './pages/HomePage/HomePage';
 import SearchPage from './pages/SearchPage/SearchPage';
 import ErrorBoundary from './components/Error/ErrorBoundary';
 import Sidebar from './components/Sidebar/Sidebar';
 import Topbar from './components/Topbar/Topbar';
 import AudioPlayer from './components/Player/AudioPlayer';
+import Callback from './components/Callback/Callback';
 import { SidebarProvider } from './components/Sidebar/SidebarContext';
 import { SearchProvider } from './components/Search/SearchContext';
 
@@ -44,7 +45,9 @@ const App = () => {
                 <div className="flex-1 overflow-auto mt-16">
                   <Routes>
                     {/* <Route path="/" element={<LoginPage />} /> */}
-                    <Route path="/" element={<HomePage />} />
+                    <Route path="/callback" element={<Callback />} />
+                    {/* <Route path="/" element={<HomePage />} /> */}
+                    <Route path="/" element={<LoginPage />} />
                     <Route 
                       path="/Search" 
                       element={

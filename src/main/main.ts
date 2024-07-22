@@ -1,5 +1,5 @@
 import path from 'path';
-import { app, BrowserWindow, shell, ipcMain } from 'electron';
+import { app, BrowserWindow, shell, ipcMain, session } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
@@ -44,11 +44,10 @@ const installExtensions = async () => {
   return installer
     .default(
       extensions.map((name) => installer[name]),
-      forceDownload,
+      forceDownload
     )
     .catch(console.log);
 };
-
 
 const createWindow = async () => {
   if (isDebug) {
@@ -101,6 +100,59 @@ const createWindow = async () => {
   mainWindow.webContents.setWindowOpenHandler((edata) => {
     shell.openExternal(edata.url);
     return { action: 'deny' };
+  });
+
+  // Intercept HTTP responses to add CSP headers
+  session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
+    if (details.responseHeaders) {
+      const responseHeaders = details.responseHeaders;
+      const csp = `default-src 'self'; script-src 'self' 'unsafe-inline' https://sdk.scdn.co; style-src 'self' 'unsafe-inline';`;
+      
+      responseHeaders['Content-Security-Policy'] = [csp];
+      
+      callback({ responseHeaders });
+    } else {
+      callback({ cancel: false });
+    }
+  });
+
+  // Intercept HTTP responses
+  session.defaultSession.webRequest.onHeadersReceived({ urls: ["*://accounts.spotify.com/*"] }, (details, callback) => {
+    if (!details.responseHeaders) {
+      callback({ cancel: false });
+      return;
+    }
+
+    console.log('Intercepted response headers:', details.responseHeaders); // Debugging statement
+
+    const locationHeader = details.responseHeaders['Location'] || details.responseHeaders['location'];
+    if (locationHeader) {
+      const redirectUrl = Array.isArray(locationHeader) ? locationHeader[0] : locationHeader;
+      console.log('Detected Location header:', redirectUrl); // Debugging statement
+
+      if (redirectUrl.includes('callback#access_token=')) {
+        const parsedUrl = new URL(redirectUrl);
+        const hashParams = new URLSearchParams(parsedUrl.hash.substring(1));
+        const accessToken = hashParams.get('access_token');
+
+        console.log('Extracted access token:', accessToken); // Debugging statement
+
+        if (accessToken && mainWindow) {
+          mainWindow.webContents.executeJavaScript(`localStorage.setItem('spotifyToken', '${accessToken}');`)
+            .then(() => {
+              console.log('Access token stored in local storage'); // Debugging statement
+
+              if (mainWindow) {
+                mainWindow.loadURL('http://localhost:1212');
+              }
+            })
+            .catch((error) => {
+              console.error('Error storing access token:', error); // Debugging statement
+            });
+        }
+      }
+    }
+    callback({ cancel: false });
   });
 
   // Remove this if your app does not use auto updates
